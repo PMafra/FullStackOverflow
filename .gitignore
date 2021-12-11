@@ -1,6 +1,5 @@
 /node_modules
 .env.test
 .env.dev
-package-lock.json
 /logs
 /coverage
