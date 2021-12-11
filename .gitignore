@@ -3,3 +3,4 @@
 .env.dev
 /logs
 /coverage
+package-lock.json
