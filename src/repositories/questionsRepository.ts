@@ -11,6 +11,17 @@ const insertQuestion = async ({
   return result.rows[0];
 };
 
+const selectQuestion = async ({
+  question, student, group,
+}: QuestionInfo): Promise<number> => {
+  const result = await connection.query(
+    'SELECT * FROM "questions" WHERE question = $1 AND student = $2 AND "group" = $3',
+    [question, student, group],
+  );
+  return result.rows[0];
+};
+
 export {
   insertQuestion,
+  selectQuestion,
 };

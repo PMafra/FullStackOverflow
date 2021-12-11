@@ -2,7 +2,7 @@ interface QuestionInfo {
     question: string,
     student: string,
     group: string,
-    tags: string,
+    tags?: string,
 }
 
 interface QuestionInfoDB extends QuestionInfo {
