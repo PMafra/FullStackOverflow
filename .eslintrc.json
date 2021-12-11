@@ -21,7 +21,8 @@
             { "js": "ignorePackages"}
         ],
         "no-plusplus": "off",
-        "import/prefer-default-export": "off"
+        "import/prefer-default-export": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     },
     "root": true,
     "parser": "@typescript-eslint/parser",
