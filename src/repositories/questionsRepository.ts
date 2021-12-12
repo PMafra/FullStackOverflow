@@ -1,5 +1,5 @@
 import connection from '../database/database';
-import { QuestionInfo } from '../interfaces/questionInfo';
+import { QuestionInfo, QuestionInfoDB } from '../interfaces/questionInfo';
 
 const insertQuestion = async ({
   question, student, group, tags,
@@ -13,9 +13,9 @@ const insertQuestion = async ({
 
 const selectQuestion = async ({
   question, student, group,
-}: QuestionInfo): Promise<number> => {
+}: QuestionInfo): Promise<QuestionInfoDB> => {
   const result = await connection.query(
-    'SELECT * FROM "questions" WHERE question = $1 AND student = $2 AND "group" = $3',
+    'SELECT * FROM "questions" WHERE question = $1 AND student = $2 AND "group" = $3;',
     [question, student, group],
   );
   return result.rows[0];
