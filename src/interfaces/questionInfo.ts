@@ -7,6 +7,8 @@ interface QuestionInfo {
 
 interface QuestionInfoDB extends QuestionInfo {
   id: number,
+  answered: boolean,
+  submitAt: string,
 }
 
 export {
