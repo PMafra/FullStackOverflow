@@ -32,7 +32,24 @@ const obtainQuestions = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
+const answerQuestion = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = res.locals;
+  const { answer } = req.body;
+  const { id: questionId } = req.params;
+  try {
+    const newAnswer = await questionsService.insertAnswer({
+      questionId: Number(questionId), answer, user,
+    });
+
+    return res.send({ answer: newAnswer }).status(201);
+  } catch (error) {
+    logger.error(error);
+    return next(error);
+  }
+};
+
 export {
   addNewQuestion,
   obtainQuestions,
+  answerQuestion,
 };

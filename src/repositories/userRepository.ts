@@ -21,7 +21,16 @@ const selectUser = async ({
   return result.rows[0];
 };
 
+const selectUserByToken = async (token: string): Promise<UserDB> => {
+  const result = await connection.query(
+    'SELECT * FROM "users" WHERE token = $1;',
+    [token],
+  );
+  return result.rows[0];
+};
+
 export {
   selectUser,
   insertUser,
+  selectUserByToken,
 };

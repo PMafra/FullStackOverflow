@@ -1,7 +1,8 @@
 import { v4 as uuid } from 'uuid';
-import { User } from '../interfaces/user';
+import { User, UserDB } from '../interfaces/user';
 import * as userRepository from '../repositories/userRepository';
 import ConflictError from '../errors/conflictError';
+import UnauthorizedError from '../errors/unauthorizedError';
 
 const insertUser = async ({ name, group }: User): Promise<string> => {
   const isAlreadyRegistered = await userRepository.selectUser({
@@ -21,6 +22,17 @@ const insertUser = async ({ name, group }: User): Promise<string> => {
   return newUser.token;
 };
 
+const selectUserByToken = async (token: string): Promise<UserDB> => {
+  const user = await userRepository.selectUserByToken(token);
+
+  if (!user) {
+    throw new UnauthorizedError();
+  }
+
+  return user;
+};
+
 export {
   insertUser,
+  selectUserByToken,
 };

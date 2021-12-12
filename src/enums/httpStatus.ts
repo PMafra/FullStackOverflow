@@ -3,6 +3,7 @@ const httpStatusCode = Object.freeze({
   NOT_FOUND: 404,
   CONFLICT: 409,
   SERVER_ERROR: 500,
+  UNAUTHORIZED: 401,
 });
 
 export {
