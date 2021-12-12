@@ -21,7 +21,15 @@ const selectQuestion = async ({
   return result.rows[0];
 };
 
+const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
+  const result = await connection.query(
+    'SELECT * FROM "questions" WHERE answered = FALSE;',
+  );
+  return result.rows;
+};
+
 export {
   insertQuestion,
   selectQuestion,
+  selectQuestions,
 };

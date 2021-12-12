@@ -13,7 +13,7 @@ const addNewUser = async (req: Request, res: Response, next: NextFunction) => {
     const token = await userService.insertUser({
       name, group,
     });
-    return res.send(token);
+    return res.send(token).status(201);
   } catch (error) {
     logger.error(error);
     return next(error);
