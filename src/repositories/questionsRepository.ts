@@ -1,3 +1,4 @@
+import { QueryResult } from 'pg';
 import connection from '../database/database';
 import { QuestionInfo, QuestionInfoDB } from '../interfaces/questionInfo';
 
@@ -38,7 +39,7 @@ const selectQuestionById = async (questionId: number): Promise<QuestionInfoDB> =
 
 const insertNewAnswer = async ({
   questionId, answer, userId,
-}: { questionId: number, answer: string, userId: number }) => {
+}: { questionId: number, answer: string, userId: number }): Promise<QueryResult> => {
   const result = await connection.query(
     'INSERT INTO "answered_questions" ("question_id", "answeredBy", answer) VALUES ($1, $2, $3)',
     [questionId, userId, answer],
@@ -46,7 +47,7 @@ const insertNewAnswer = async ({
   return result;
 };
 
-const updateAnsweredState = async (questionId: number) => {
+const updateAnsweredState = async (questionId: number): Promise<QueryResult> => {
   const result = await connection.query(
     'UPDATE "questions" SET answered = TRUE WHERE id = $1',
     [questionId],

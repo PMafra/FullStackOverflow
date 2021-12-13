@@ -15,7 +15,7 @@ const addNewQuestion = async (req: Request, res: Response, next: NextFunction) =
     const newQuestion = await questionsService.insertQuestion({
       question, student, group, tags,
     });
-    return res.send(newQuestion).status(201);
+    return res.send(newQuestion);
   } catch (error) {
     logger.error(error);
     return next(error);
@@ -41,7 +41,7 @@ const answerQuestion = async (req: Request, res: Response, next: NextFunction) =
       questionId: Number(questionId), answer, user,
     });
 
-    return res.send({ answer: newAnswer }).status(201);
+    return res.send({ answer: newAnswer });
   } catch (error) {
     logger.error(error);
     return next(error);
