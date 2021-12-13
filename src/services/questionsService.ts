@@ -56,8 +56,37 @@ const insertAnswer = async ({
   return answer;
 };
 
+const selectQuestionById = async (questionId: number) => {
+  const question = await questionsRepository.selectQuestionById(
+    questionId,
+  );
+
+  if (!question) {
+    throw new NotFoundError();
+  }
+
+  if (!question.answered) {
+    const newTimestamp = new Date(question.submitAt).toLocaleString();
+    question.submitAt = newTimestamp;
+    delete question.id;
+    return question;
+  }
+
+  const answeredQuestion = await questionsRepository.selectAnsweredQuestionById(
+    questionId,
+  );
+
+  delete answeredQuestion.question_id;
+  delete answeredQuestion.id;
+  const newTimestamp = new Date(answeredQuestion.submitAt).toLocaleString();
+  answeredQuestion.submitAt = newTimestamp;
+
+  return answeredQuestion;
+};
+
 export {
   insertQuestion,
   selectQuestions,
   insertAnswer,
+  selectQuestionById,
 };

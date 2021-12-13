@@ -11,7 +11,14 @@ interface QuestionInfoDB extends QuestionInfo {
   submitAt: string,
 }
 
+interface AnsweredQuestion extends QuestionInfoDB {
+  question_id: number,
+  answeredBy: string,
+  answer: string,
+}
+
 export {
   QuestionInfo,
   QuestionInfoDB,
+  AnsweredQuestion,
 };

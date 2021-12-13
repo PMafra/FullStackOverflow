@@ -49,8 +49,22 @@ const answerQuestion = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
+const obtainQuestionById = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+  const questionId = Number(id);
+
+  try {
+    const question = await questionsService.selectQuestionById(questionId);
+    return res.send(question);
+  } catch (error) {
+    logger.error(error);
+    return next(error);
+  }
+};
+
 export {
   addNewQuestion,
   obtainQuestions,
   answerQuestion,
+  obtainQuestionById,
 };
