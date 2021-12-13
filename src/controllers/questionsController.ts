@@ -1,10 +1,9 @@
-/* eslint-disable no-console */
 import { Request, Response, NextFunction } from 'express';
 import * as questionsService from '../services/questionsService';
 import { logger } from '../utils/logger';
 import * as validationService from '../services/validationService';
 import { newQuestionSchema, answerSchema } from '../validations/joiSchemas';
-import { QuestionInfo } from '../interfaces/questionInfo';
+import { Question } from '../interfaces/question';
 
 const addNewQuestion = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -15,7 +14,7 @@ const addNewQuestion = async (req: Request, res: Response, next: NextFunction) =
       student,
       group,
       tags,
-    }: QuestionInfo = req.body;
+    }: Question = req.body;
 
     const newQuestion = await questionsService.insertQuestion({
       question, student, group, tags,
@@ -71,7 +70,7 @@ const obtainQuestionById = async (req: Request, res: Response, next: NextFunctio
   }
 
   try {
-    const question = await questionsService.selectQuestionById(questionId);
+    const question = await questionsService.selectQuestionById({ questionId });
     return res.send(question);
   } catch (error) {
     logger.error(error);

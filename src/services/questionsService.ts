@@ -1,20 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
-import { QuestionInfo, QuestionInfoDB } from '../interfaces/questionInfo';
+import {
+  Question, QuestionDB, FormattedQuestion, FormattedAnsweredQuestion,
+} from '../interfaces/question';
 import * as questionsRepository from '../repositories/questionsRepository';
 import ConflictError from '../errors/conflictError';
 import NotFoundError from '../errors/notFoundError';
 import { Answer } from '../interfaces/answer';
 
-const formatTimestamp = (info: string) => {
+const formatTimestamp = ({ info }: {info: string}): string => {
   const newTimestamp = new Date(info).toLocaleString();
   return newTimestamp;
 };
 
 const insertQuestion = async ({
   question, student, group, tags,
-}: QuestionInfo): Promise<number> => {
+}: Question): Promise<number> => {
   const isAlreadyAsked = await questionsRepository.selectQuery({
     question, student, group,
   });
@@ -30,10 +31,10 @@ const insertQuestion = async ({
   return newQuestion;
 };
 
-const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
+const selectQuestions = async (): Promise<QuestionDB[]> => {
   const notAnsweredQuestions = await questionsRepository.selectQuery({ getAllNotAnswered: true });
   notAnsweredQuestions.forEach((question: any) => {
-    const newTimeStamp = formatTimestamp(question.submitAt);
+    const newTimeStamp = formatTimestamp({ info: question.submitAt });
     question.submitAt = newTimeStamp;
     delete question.tags;
     delete question.answered;
@@ -61,7 +62,23 @@ const insertAnswer = async ({
   return answer;
 };
 
-const selectQuestionById = async (questionId: number) => {
+const formatQuestion = ({
+  isAnswered, question,
+}: {isAnswered: boolean, question: any}): FormattedQuestion|FormattedAnsweredQuestion => {
+  const newSubmitAt = formatTimestamp({ info: question.submitAt });
+  question.submitAt = newSubmitAt;
+  delete question.id;
+  if (isAnswered) {
+    delete question.question_id;
+    const newAnsweredAt = formatTimestamp({ info: question.answeredAt });
+    question.answeredAt = newAnsweredAt;
+    question.answeredBy = question.name;
+    delete question.name;
+  }
+  return question;
+};
+
+const selectQuestionById = async ({ questionId }: {questionId: number}) => {
   const question = await questionsRepository.selectQuery({ id: questionId });
 
   if (!question) {
@@ -69,27 +86,18 @@ const selectQuestionById = async (questionId: number) => {
   }
 
   if (!question.answered) {
-    const newTimeStamp = formatTimestamp(question.submitAt);
-    question.submitAt = newTimeStamp;
-    delete question.id;
-    return question;
+    const formattedQuestion = formatQuestion({ isAnswered: false, question });
+    return formattedQuestion;
   }
 
   const answeredQuestion = await questionsRepository.selectAnsweredQuestionById(
     questionId,
   );
 
-  delete answeredQuestion.question_id;
-  delete answeredQuestion.id;
-  const newTimestamp = formatTimestamp(answeredQuestion.submitAt);
-  answeredQuestion.submitAt = newTimestamp;
-  const newTimestamp2 = formatTimestamp(answeredQuestion.answeredAt);
-  answeredQuestion.answeredAt = newTimestamp2;
-
-  answeredQuestion.answeredBy = answeredQuestion.name;
-  delete answeredQuestion.name;
-
-  return answeredQuestion;
+  const formattedAnsweredQuestion = formatQuestion({
+    isAnswered: true, question: answeredQuestion,
+  });
+  return formattedAnsweredQuestion;
 };
 
 export {
@@ -97,5 +105,4 @@ export {
   selectQuestions,
   insertAnswer,
   selectQuestionById,
-  formatTimestamp,
 };

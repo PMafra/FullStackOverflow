@@ -1,6 +1,4 @@
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable function-paren-newline */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction } from 'express';
 import { logger } from '../utils/logger';
@@ -10,9 +8,7 @@ import ConflictError from '../errors/conflictError';
 import { httpStatusCode } from '../enums/httpStatus';
 import UnauthorizedError from '../errors/unauthorizedError';
 
-const middlewareError = async (
-  err: any, req: Request, res: Response, next: NextFunction,
-) => {
+const middlewareError = async (err: any, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof RequestError) {
     return res.status(httpStatusCode.BAD_REQUEST).send(err.message);
   }
