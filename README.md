@@ -4,7 +4,7 @@ Have you ever had a technical question and didn't know where to ask? This is an 
 
 ## About
 
-FullstackOverflow is an API where people can freely post and answer questions.
+FullstackOverflow is an API where people can freely post and answer questions. Each question can have only one answer or none (if it hasn't been answered yet)
 
 Below are the implemented routes:
 
