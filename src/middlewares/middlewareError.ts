@@ -14,7 +14,7 @@ const middlewareError = async (
   err: any, req: Request, res: Response, next: NextFunction,
 ) => {
   if (err instanceof RequestError) {
-    return res.sendStatus(httpStatusCode.BAD_REQUEST);
+    return res.status(httpStatusCode.BAD_REQUEST).send(err.message);
   }
   if (err instanceof NotFoundError) {
     return res.sendStatus(httpStatusCode.NOT_FOUND);
