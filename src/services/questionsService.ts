@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
-import { Question, QuestionDB } from '../interfaces/question';
+import { Question, QuestionDB, FormatedQuestion } from '../interfaces/question';
 import * as questionsRepository from '../repositories/questionsRepository';
 import ConflictError from '../errors/conflictError';
 import NotFoundError from '../errors/notFoundError';
 import { Answer } from '../interfaces/answer';
 
-const formatTimestamp = ({ info }: {info: string}) => {
+const formatTimestamp = ({ info }: {info: string}): string => {
   const newTimestamp = new Date(info).toLocaleString();
   return newTimestamp;
 };
@@ -61,7 +61,9 @@ const insertAnswer = async ({
   return answer;
 };
 
-const formatQuestion = ({ isAnswered, question }: {isAnswered: boolean, question: any}) => {
+const formatQuestion = ({
+  isAnswered, question,
+}: {isAnswered: boolean, question: any}): FormatedQuestion => {
   const newSubmitAt = formatTimestamp({ info: question.submitAt });
   question.submitAt = newSubmitAt;
   delete question.id;

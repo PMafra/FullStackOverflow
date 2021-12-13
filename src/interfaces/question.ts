@@ -6,7 +6,7 @@ interface Question {
 }
 
 interface QuestionDB extends Question {
-  id: number,
+  id?: number,
   answered: boolean,
   submitAt: string,
 }
@@ -19,8 +19,15 @@ interface AnsweredQuestionDB extends QuestionDB {
   name: string,
 }
 
+interface FormatedQuestion extends QuestionDB {
+  answeredBy?: string,
+  answeredAt?: string,
+  answer?: string,
+}
+
 export {
   Question,
   QuestionDB,
   AnsweredQuestionDB,
+  FormatedQuestion,
 };
