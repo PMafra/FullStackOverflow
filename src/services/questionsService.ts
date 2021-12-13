@@ -15,7 +15,7 @@ const formatTimestamp = (info: string) => {
 const insertQuestion = async ({
   question, student, group, tags,
 }: QuestionInfo): Promise<number> => {
-  const isAlreadyAsked = await questionsRepository.selectQuestion({
+  const isAlreadyAsked = await questionsRepository.selectQuery({
     question, student, group,
   });
 
@@ -31,8 +31,8 @@ const insertQuestion = async ({
 };
 
 const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
-  const notAnsweredQuestions = await questionsRepository.selectQuestions();
-  notAnsweredQuestions.forEach((question) => {
+  const notAnsweredQuestions = await questionsRepository.selectQuery({ getAllNotAnswered: true });
+  notAnsweredQuestions.forEach((question: any) => {
     const newTimeStamp = formatTimestamp(question.submitAt);
     question.submitAt = newTimeStamp;
     delete question.tags;
@@ -45,7 +45,7 @@ const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
 const insertAnswer = async ({
   questionId, answer, user,
 }: Answer): Promise<string> => {
-  const questionToBeAnswered = await questionsRepository.selectQuestionById(questionId);
+  const questionToBeAnswered = await questionsRepository.selectQuery({ id: questionId });
 
   if (!questionToBeAnswered) {
     throw new NotFoundError();
@@ -62,9 +62,7 @@ const insertAnswer = async ({
 };
 
 const selectQuestionById = async (questionId: number) => {
-  const question = await questionsRepository.selectQuestionById(
-    questionId,
-  );
+  const question = await questionsRepository.selectQuery({ id: questionId });
 
   if (!question) {
     throw new NotFoundError();
