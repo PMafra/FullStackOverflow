@@ -7,7 +7,7 @@ import ConflictError from '../errors/conflictError';
 import NotFoundError from '../errors/notFoundError';
 import { Answer } from '../interfaces/answer';
 
-const formatTimestamp = (info: any) => {
+const formatTimestamp = (info: string) => {
   const newTimestamp = new Date(info).toLocaleString();
   return newTimestamp;
 };
