@@ -1,7 +1,7 @@
 # FullStackOverflow_API
 
-Have you ever had a technical question and didn't know where to ask? This is an API for you! </br></br>
-API link: https://fullstack-overflow.herokuapp.com/
+Have you ever had a technical question and didn't know where to ask? This is an API for you! </br>
+> API link: https://fullstack-overflow.herokuapp.com/
 
 ## About
 
