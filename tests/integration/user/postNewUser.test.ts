@@ -3,7 +3,7 @@ import supertest from 'supertest';
 import clearDatabase from '../../helpers/clearDatabase';
 import app from '../../../src/app';
 import connection from '../../../src/database/database';
-import { insertQuestion, generateRandomQuestion, Question } from '../../factories/questionFactory';
+import { insertUser, User, generateRandomUser } from '../../factories/userFactory';
 
 const agent = supertest(app);
 
@@ -14,32 +14,32 @@ afterAll(() => {
   connection.end();
 });
 
-describe('POST /questions', () => {
-  it('should return newQuestion id for new question added', async () => {
+describe('POST /users', () => {
+  it('should return new user token for new user registered', async () => {
     const result = await agent
-      .post('/questions')
-      .send(generateRandomQuestion());
+      .post('/users')
+      .send(generateRandomUser());
     expect(result.body).toEqual(
       expect.objectContaining({
-        id: expect.any(Number),
+        token: expect.any(String),
       }),
     );
   });
 
   it('should return status 400 for wrong body', async () => {
     const result = await agent
-      .post('/questions')
+      .post('/users')
       .send({ wrongBody: true });
     expect(result.status).toEqual(400);
   });
 
-  it('should return status 409 for already existing question', async () => {
-    const mockQuestion = new Question('Is a valid test?', 'Pedro', 'T3', 'test, jest, supertest, typescript');
-    await insertQuestion(mockQuestion);
+  it('should return status 409 for already existing user', async () => {
+    const mockUser = new User('Pedro', 'T3', 'token');
+    await insertUser(mockUser);
 
     const result = await agent
-      .post('/questions')
-      .send(mockQuestion);
+      .post('/users')
+      .send({ name: 'Pedro', group: 'T3' });
     expect(result.status).toEqual(409);
   });
 });
