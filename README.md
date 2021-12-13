@@ -1,6 +1,7 @@
 # FullStackOverflow_API
 
-Have you ever had a technical question and didn't know where to ask? This is an API for you!
+Have you ever had a technical question and didn't know where to ask? This is an API for you! </br></br>
+API link: https://fullstack-overflow.herokuapp.com/
 
 ## About
 
@@ -81,8 +82,6 @@ Body:
 	"answer": "The question answer" 
 }
 ```
-
-API link: https://fullstack-overflow.herokuapp.com/
 
 ## Technologies
 Main thechnologies used in the construction of the project:<br>
