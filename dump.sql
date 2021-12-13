@@ -24,6 +24,7 @@ CREATE TABLE "answered_questions" (
 	"question_id" integer NOT NULL,
 	"answeredBy" integer NOT NULL,
 	"answer" TEXT NOT NULL,
+	"answeredAt" timestamp with time zone DEFAULT NOW(),
 	CONSTRAINT "answered_questions_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

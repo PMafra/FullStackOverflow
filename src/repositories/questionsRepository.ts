@@ -58,7 +58,7 @@ const updateAnsweredState = async (questionId: number): Promise<QueryResult> => 
 
 const selectAnsweredQuestionById = async (questionId: number): Promise<AnsweredQuestion> => {
   const result = await connection.query(
-    'SELECT questions.*, "answered_questions".* FROM "questions" JOIN "answered_questions" ON questions.id = "answered_questions"."question_id" JOIN users ON users.id = "answered_questions"."answeredBy" WHERE questions.id = $1;',
+    'SELECT questions.*, "answered_questions".*, "users".name FROM "questions" JOIN "answered_questions" ON questions.id = "answered_questions"."question_id" JOIN users ON users.id = "answered_questions"."answeredBy" WHERE questions.id = $1;',
     [questionId],
   );
   return result.rows[0];

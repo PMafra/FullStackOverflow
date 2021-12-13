@@ -85,6 +85,11 @@ const selectQuestionById = async (questionId: number) => {
   delete answeredQuestion.id;
   const newTimestamp = formatTimestamp(answeredQuestion.submitAt);
   answeredQuestion.submitAt = newTimestamp;
+  const newTimestamp2 = formatTimestamp(answeredQuestion.answeredAt);
+  answeredQuestion.answeredAt = newTimestamp2;
+
+  answeredQuestion.answeredBy = answeredQuestion.name;
+  delete answeredQuestion.name;
 
   return answeredQuestion;
 };

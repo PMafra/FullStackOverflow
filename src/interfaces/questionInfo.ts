@@ -15,6 +15,8 @@ interface AnsweredQuestion extends QuestionInfoDB {
   question_id: number,
   answeredBy: string,
   answer: string,
+  answeredAt: string,
+  name: string,
 }
 
 export {
