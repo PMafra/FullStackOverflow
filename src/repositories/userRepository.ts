@@ -1,6 +1,7 @@
 import connection from '../database/database';
 import { User, UserDB } from '../interfaces/user';
-import { SelectQueryInterface, filterHelper, generateSelect } from '../helpers/queryHelper';
+import { filterHelper, generateSelect } from '../helpers/queryHelper';
+import { SelectQueryInterface } from '../interfaces/query';
 
 const insertUser = async ({
   name, group, token,

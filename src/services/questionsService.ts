@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
-import { QuestionInfo, QuestionInfoDB } from '../interfaces/question';
+import { Question, QuestionDB } from '../interfaces/question';
 import * as questionsRepository from '../repositories/questionsRepository';
 import ConflictError from '../errors/conflictError';
 import NotFoundError from '../errors/notFoundError';
@@ -14,7 +14,7 @@ const formatTimestamp = ({ info }: {info: string}) => {
 
 const insertQuestion = async ({
   question, student, group, tags,
-}: QuestionInfo): Promise<number> => {
+}: Question): Promise<number> => {
   const isAlreadyAsked = await questionsRepository.selectQuery({
     question, student, group,
   });
@@ -30,7 +30,7 @@ const insertQuestion = async ({
   return newQuestion;
 };
 
-const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
+const selectQuestions = async (): Promise<QuestionDB[]> => {
   const notAnsweredQuestions = await questionsRepository.selectQuery({ getAllNotAnswered: true });
   notAnsweredQuestions.forEach((question: any) => {
     const newTimeStamp = formatTimestamp({ info: question.submitAt });

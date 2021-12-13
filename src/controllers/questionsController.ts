@@ -4,7 +4,7 @@ import * as questionsService from '../services/questionsService';
 import { logger } from '../utils/logger';
 import * as validationService from '../services/validationService';
 import { newQuestionSchema, answerSchema } from '../validations/joiSchemas';
-import { QuestionInfo } from '../interfaces/question';
+import { Question } from '../interfaces/question';
 
 const addNewQuestion = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -15,7 +15,7 @@ const addNewQuestion = async (req: Request, res: Response, next: NextFunction) =
       student,
       group,
       tags,
-    }: QuestionInfo = req.body;
+    }: Question = req.body;
 
     const newQuestion = await questionsService.insertQuestion({
       question, student, group, tags,

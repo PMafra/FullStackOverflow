@@ -1,17 +1,17 @@
-interface QuestionInfo {
+interface Question {
     question: string,
     student: string,
     group: string,
     tags?: string,
 }
 
-interface QuestionInfoDB extends QuestionInfo {
+interface QuestionDB extends Question {
   id: number,
   answered: boolean,
   submitAt: string,
 }
 
-interface AnsweredQuestion extends QuestionInfoDB {
+interface AnsweredQuestionDB extends QuestionDB {
   question_id: number,
   answeredBy: string,
   answer: string,
@@ -20,7 +20,7 @@ interface AnsweredQuestion extends QuestionInfoDB {
 }
 
 export {
-  QuestionInfo,
-  QuestionInfoDB,
-  AnsweredQuestion,
+  Question,
+  QuestionDB,
+  AnsweredQuestionDB,
 };
