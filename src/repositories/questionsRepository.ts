@@ -1,6 +1,7 @@
 import { QueryResult } from 'pg';
 import connection from '../database/database';
 import { QuestionInfo, QuestionInfoDB } from '../interfaces/questionInfo';
+import { Answer } from '../interfaces/answer';
 
 const insertQuestion = async ({
   question, student, group, tags,
@@ -39,7 +40,7 @@ const selectQuestionById = async (questionId: number): Promise<QuestionInfoDB> =
 
 const insertNewAnswer = async ({
   questionId, answer, userId,
-}: { questionId: number, answer: string, userId: number }): Promise<QueryResult> => {
+}: Answer): Promise<QueryResult> => {
   const result = await connection.query(
     'INSERT INTO "answered_questions" ("question_id", "answeredBy", answer) VALUES ($1, $2, $3)',
     [questionId, userId, answer],

@@ -5,6 +5,7 @@ import { QuestionInfo, QuestionInfoDB } from '../interfaces/questionInfo';
 import * as questionsRepository from '../repositories/questionsRepository';
 import ConflictError from '../errors/conflictError';
 import NotFoundError from '../errors/notFoundError';
+import { Answer } from '../interfaces/answer';
 
 const insertQuestion = async ({
   question, student, group, tags,
@@ -38,7 +39,7 @@ const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
 
 const insertAnswer = async ({
   questionId, answer, user,
-}: { questionId: number, answer: string, user: any }): Promise<string> => {
+}: Answer): Promise<string> => {
   const questionToBeAnswered = await questionsRepository.selectQuestionById(questionId);
 
   if (!questionToBeAnswered) {

@@ -35,10 +35,11 @@ const obtainQuestions = async (req: Request, res: Response, next: NextFunction) 
 const answerQuestion = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = res.locals;
   const { answer } = req.body;
-  const { id: questionId } = req.params;
+  const { id } = req.params;
+  const questionId = Number(id);
   try {
     const newAnswer = await questionsService.insertAnswer({
-      questionId: Number(questionId), answer, user,
+      questionId, answer, user,
     });
 
     return res.send({ answer: newAnswer });
