@@ -7,6 +7,11 @@ import ConflictError from '../errors/conflictError';
 import NotFoundError from '../errors/notFoundError';
 import { Answer } from '../interfaces/answer';
 
+const formatTimestamp = (info: string) => {
+  const newTimestamp = new Date(info).toLocaleString();
+  return newTimestamp;
+};
+
 const insertQuestion = async ({
   question, student, group, tags,
 }: QuestionInfo): Promise<number> => {
@@ -28,8 +33,8 @@ const insertQuestion = async ({
 const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
   const notAnsweredQuestions = await questionsRepository.selectQuestions();
   notAnsweredQuestions.forEach((question) => {
-    const newTimestamp = new Date(question.submitAt).toLocaleString();
-    question.submitAt = newTimestamp;
+    const newTimeStamp = formatTimestamp(question.submitAt);
+    question.submitAt = newTimeStamp;
     delete question.tags;
     delete question.answered;
   });
@@ -56,8 +61,43 @@ const insertAnswer = async ({
   return answer;
 };
 
+const selectQuestionById = async (questionId: number) => {
+  const question = await questionsRepository.selectQuestionById(
+    questionId,
+  );
+
+  if (!question) {
+    throw new NotFoundError();
+  }
+
+  if (!question.answered) {
+    const newTimeStamp = formatTimestamp(question.submitAt);
+    question.submitAt = newTimeStamp;
+    delete question.id;
+    return question;
+  }
+
+  const answeredQuestion = await questionsRepository.selectAnsweredQuestionById(
+    questionId,
+  );
+
+  delete answeredQuestion.question_id;
+  delete answeredQuestion.id;
+  const newTimestamp = formatTimestamp(answeredQuestion.submitAt);
+  answeredQuestion.submitAt = newTimestamp;
+  const newTimestamp2 = formatTimestamp(answeredQuestion.answeredAt);
+  answeredQuestion.answeredAt = newTimestamp2;
+
+  answeredQuestion.answeredBy = answeredQuestion.name;
+  delete answeredQuestion.name;
+
+  return answeredQuestion;
+};
+
 export {
   insertQuestion,
   selectQuestions,
   insertAnswer,
+  selectQuestionById,
+  formatTimestamp,
 };
