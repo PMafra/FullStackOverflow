@@ -82,7 +82,7 @@ Body:
 }
 ```
 
-<!--- API link: https://api-singmeasong.herokuapp.com/ --->
+API link: https://fullstack-overflow.herokuapp.com/
 
 ## Technologies
 Main thechnologies used in the construction of the project:<br>
