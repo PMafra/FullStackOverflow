@@ -4,7 +4,7 @@ Have you ever had a technical question and didn't know where to ask? This is an 
 
 ## About
 
-FullstackOverflow is an API where people can freely post and answer questions. Each question can have only one answer or none (if it hasn't been answered yet)
+FullstackOverflow is an API where people can freely post and answer questions. Each question can have only one answer or none (if it hasn't been answered yet).
 
 Below are the implemented routes:
 
@@ -43,7 +43,7 @@ If the question hasn`t been answered yet:
 	"student": "Some student",
 	"group": "Some class code",
 	"tags": "typescript, life, javascript, java?",
-  "answered": false,
+  	"answered": false,
 	"submitAt": "Timestamp with the date and time when the question was asked"
 }
 ```
@@ -54,7 +54,7 @@ If the question has already been answered:
 	"student": "Some student",
 	"group": "Some class code",
 	"tags": "typescript, life, javascript, java?",
-  "answered": true,
+  	"answered": true,
 	"submitAt": "Timestamp with the date and time when the question was asked"
 	"answeredAt": "Timestamp with the date and time when the question was answered"
 	"answeredBy": "Name of student who answered the question",
@@ -126,4 +126,4 @@ npx ntl
 5. Choose one of the three options to run back-end:
 * **test** - for test environment
 * **start** - for production environment
-* **start:dev** - for development environment
+* **dev** - for development environment
