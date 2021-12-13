@@ -22,7 +22,7 @@ const insertUser = async ({ name, group }: User): Promise<string> => {
   return newUser.token;
 };
 
-const selectUserByToken = async (token: string): Promise<UserDB> => {
+const selectUserByToken = async ({ token }: {token: string}): Promise<UserDB> => {
   const user = await userRepository.selectQuery({ token });
 
   if (!user) {

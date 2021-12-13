@@ -1,18 +1,6 @@
+import { HelperInterface } from '../interfaces/helper';
+
 const generateSelect = ({ table }: {table: string}) => `SELECT * FROM "${table}"`;
-
-interface SelectQueryInterface {
-    getAllNotAnswered?: boolean;
-    id?: number,
-    question?: string,
-    student?: string,
-    group?: string,
-    token?: string,
-    name?: string,
-}
-
-interface HelperInterface extends SelectQueryInterface {
-    baseQuery?: string;
-}
 
 const filterHelper = ({
   baseQuery, getAllNotAnswered, id, question, student, group, name, token,
@@ -79,4 +67,4 @@ const filterHelper = ({
   };
 };
 
-export { filterHelper, SelectQueryInterface, generateSelect };
+export { filterHelper, generateSelect };

@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import { QueryResult } from 'pg';
 import connection from '../database/database';
-import { QuestionInfo, AnsweredQuestion } from '../interfaces/questionInfo';
+import { QuestionInfo, AnsweredQuestion } from '../interfaces/question';
 import { Answer } from '../interfaces/answer';
-import { filterHelper, SelectQueryInterface, generateSelect } from '../helpers/queryHelper';
+import { filterHelper, generateSelect } from '../helpers/queryHelper';
+import { SelectQueryInterface } from '../interfaces/query';
 
 const insertQuestion = async ({
   question, student, group, tags,

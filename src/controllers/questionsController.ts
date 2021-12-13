@@ -4,7 +4,7 @@ import * as questionsService from '../services/questionsService';
 import { logger } from '../utils/logger';
 import * as validationService from '../services/validationService';
 import { newQuestionSchema, answerSchema } from '../validations/joiSchemas';
-import { QuestionInfo } from '../interfaces/questionInfo';
+import { QuestionInfo } from '../interfaces/question';
 
 const addNewQuestion = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -71,7 +71,7 @@ const obtainQuestionById = async (req: Request, res: Response, next: NextFunctio
   }
 
   try {
-    const question = await questionsService.selectQuestionById(questionId);
+    const question = await questionsService.selectQuestionById({ questionId });
     return res.send(question);
   } catch (error) {
     logger.error(error);

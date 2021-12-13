@@ -8,7 +8,7 @@ async function auth(req: Request, res: Response, next: NextFunction) {
   if (!token) return res.sendStatus(httpStatusCode.UNAUTHORIZED);
 
   try {
-    const user = await userService.selectUserByToken(token);
+    const user = await userService.selectUserByToken({ token });
 
     if (!user) {
       return res.sendStatus(httpStatusCode.UNAUTHORIZED);
