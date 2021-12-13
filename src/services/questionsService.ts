@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-param-reassign */
-import { Question, QuestionDB, FormatedQuestion } from '../interfaces/question';
+import {
+  Question, QuestionDB, FormatedQuestion, FormatedAnsweredQuestion,
+} from '../interfaces/question';
 import * as questionsRepository from '../repositories/questionsRepository';
 import ConflictError from '../errors/conflictError';
 import NotFoundError from '../errors/notFoundError';
@@ -62,7 +64,7 @@ const insertAnswer = async ({
 
 const formatQuestion = ({
   isAnswered, question,
-}: {isAnswered: boolean, question: any}): FormatedQuestion => {
+}: {isAnswered: boolean, question: any}): FormatedQuestion|FormatedAnsweredQuestion => {
   const newSubmitAt = formatTimestamp({ info: question.submitAt });
   question.submitAt = newSubmitAt;
   delete question.id;
