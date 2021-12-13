@@ -2,6 +2,7 @@ import { QueryResult } from 'pg';
 import connection from '../database/database';
 import { QuestionInfo, QuestionInfoDB, AnsweredQuestion } from '../interfaces/questionInfo';
 import { Answer } from '../interfaces/answer';
+import { filterHelper, SelectQueryInterface } from '../helpers/filterHelper';
 
 const insertQuestion = async ({
   question, student, group, tags,
@@ -35,6 +36,28 @@ const selectQuestionById = async (questionId: number): Promise<QuestionInfoDB> =
     'SELECT * FROM "questions" WHERE id = $1;',
     [questionId],
   );
+  return result.rows[0];
+};
+
+const generateSelect = ({ table }: {table: string}) => `SELECT * FROM "${table}"`;
+
+const selectQuery = async ({
+  getAllNotAnswered, id, question, student, group,
+}: SelectQueryInterface) => {
+  const baseQuery = generateSelect({ table: 'questions' });
+  const {
+    finalQuery,
+    preparedValues,
+  } = filterHelper({
+    baseQuery, getAllNotAnswered, id, question, student, group,
+  });
+
+  const result = await connection.query(`${finalQuery}`, preparedValues);
+
+  if (getAllNotAnswered) {
+    return result.rows;
+  }
+
   return result.rows[0];
 };
 
@@ -72,4 +95,5 @@ export {
   insertNewAnswer,
   updateAnsweredState,
   selectAnsweredQuestionById,
+  selectQuery,
 };
