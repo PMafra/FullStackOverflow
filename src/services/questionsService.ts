@@ -61,6 +61,20 @@ const insertAnswer = async ({
   return answer;
 };
 
+const formatQuestion = ({ isAnswered, question }: {isAnswered: boolean, question: any}) => {
+  const newSubmitAt = formatTimestamp(question.submitAt);
+  question.submitAt = newSubmitAt;
+  delete question.id;
+  if (isAnswered) {
+    delete question.question_id;
+    const newAnsweredAt = formatTimestamp(question.answeredAt);
+    question.answeredAt = newAnsweredAt;
+    question.answeredBy = question.name;
+    delete question.name;
+  }
+  return question;
+};
+
 const selectQuestionById = async (questionId: number) => {
   const question = await questionsRepository.selectQuery({ id: questionId });
 
@@ -69,27 +83,16 @@ const selectQuestionById = async (questionId: number) => {
   }
 
   if (!question.answered) {
-    const newTimeStamp = formatTimestamp(question.submitAt);
-    question.submitAt = newTimeStamp;
-    delete question.id;
-    return question;
+    const formatedQuestion = formatQuestion({ isAnswered: false, question });
+    return formatedQuestion;
   }
 
   const answeredQuestion = await questionsRepository.selectAnsweredQuestionById(
     questionId,
   );
 
-  delete answeredQuestion.question_id;
-  delete answeredQuestion.id;
-  const newTimestamp = formatTimestamp(answeredQuestion.submitAt);
-  answeredQuestion.submitAt = newTimestamp;
-  const newTimestamp2 = formatTimestamp(answeredQuestion.answeredAt);
-  answeredQuestion.answeredAt = newTimestamp2;
-
-  answeredQuestion.answeredBy = answeredQuestion.name;
-  delete answeredQuestion.name;
-
-  return answeredQuestion;
+  const formatedAnsweredQuestion = formatQuestion({ isAnswered: true, question: answeredQuestion });
+  return formatedAnsweredQuestion;
 };
 
 export {
