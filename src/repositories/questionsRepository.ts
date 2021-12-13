@@ -1,5 +1,7 @@
+import { QueryResult } from 'pg';
 import connection from '../database/database';
 import { QuestionInfo, QuestionInfoDB } from '../interfaces/questionInfo';
+import { Answer } from '../interfaces/answer';
 
 const insertQuestion = async ({
   question, student, group, tags,
@@ -28,8 +30,37 @@ const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
   return result.rows;
 };
 
+const selectQuestionById = async (questionId: number): Promise<QuestionInfoDB> => {
+  const result = await connection.query(
+    'SELECT * FROM "questions" WHERE id = $1;',
+    [questionId],
+  );
+  return result.rows[0];
+};
+
+const insertNewAnswer = async ({
+  questionId, answer, userId,
+}: Answer): Promise<QueryResult> => {
+  const result = await connection.query(
+    'INSERT INTO "answered_questions" ("question_id", "answeredBy", answer) VALUES ($1, $2, $3)',
+    [questionId, userId, answer],
+  );
+  return result;
+};
+
+const updateAnsweredState = async (questionId: number): Promise<QueryResult> => {
+  const result = await connection.query(
+    'UPDATE "questions" SET answered = TRUE WHERE id = $1',
+    [questionId],
+  );
+  return result;
+};
+
 export {
   insertQuestion,
   selectQuestion,
   selectQuestions,
+  selectQuestionById,
+  insertNewAnswer,
+  updateAnsweredState,
 };

@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 import { QuestionInfo, QuestionInfoDB } from '../interfaces/questionInfo';
 import * as questionsRepository from '../repositories/questionsRepository';
 import ConflictError from '../errors/conflictError';
+import NotFoundError from '../errors/notFoundError';
+import { Answer } from '../interfaces/answer';
 
 const insertQuestion = async ({
   question, student, group, tags,
@@ -34,7 +37,27 @@ const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
   return notAnsweredQuestions;
 };
 
+const insertAnswer = async ({
+  questionId, answer, user,
+}: Answer): Promise<string> => {
+  const questionToBeAnswered = await questionsRepository.selectQuestionById(questionId);
+
+  if (!questionToBeAnswered) {
+    throw new NotFoundError();
+  }
+
+  if (questionToBeAnswered.answered) {
+    throw new ConflictError();
+  }
+
+  await questionsRepository.insertNewAnswer({ questionId, answer, userId: user.id });
+  await questionsRepository.updateAnsweredState(questionId);
+
+  return answer;
+};
+
 export {
   insertQuestion,
   selectQuestions,
+  insertAnswer,
 };

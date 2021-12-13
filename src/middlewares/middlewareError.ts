@@ -8,6 +8,7 @@ import RequestError from '../errors/requestError';
 import NotFoundError from '../errors/notFoundError';
 import ConflictError from '../errors/conflictError';
 import { httpStatusCode } from '../enums/httpStatus';
+import UnauthorizedError from '../errors/unauthorizedError';
 
 const middlewareError = async (
   err: any, req: Request, res: Response, next: NextFunction,
@@ -20,6 +21,9 @@ const middlewareError = async (
   }
   if (err instanceof ConflictError) {
     return res.sendStatus(httpStatusCode.CONFLICT);
+  }
+  if (err instanceof UnauthorizedError) {
+    return res.sendStatus(httpStatusCode.UNAUTHORIZED);
   }
   const logErrorMessage = `method=${req.method} - url=${req.originalUrl} - ip=${req.ip} - message=${err.message} - status=500`;
   logger.error(logErrorMessage);
