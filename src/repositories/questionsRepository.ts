@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { QueryResult } from 'pg';
 import connection from '../database/database';
 import { Question, AnsweredQuestionDB } from '../interfaces/question';

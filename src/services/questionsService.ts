@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 import { Question, QuestionDB, FormatedQuestion } from '../interfaces/question';
 import * as questionsRepository from '../repositories/questionsRepository';

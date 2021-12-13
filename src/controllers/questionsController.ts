@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Request, Response, NextFunction } from 'express';
 import * as questionsService from '../services/questionsService';
 import { logger } from '../utils/logger';
