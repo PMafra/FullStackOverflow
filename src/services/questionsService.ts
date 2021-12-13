@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-param-reassign */
 import {
-  Question, QuestionDB, FormatedQuestion, FormatedAnsweredQuestion,
+  Question, QuestionDB, FormattedQuestion, FormattedAnsweredQuestion,
 } from '../interfaces/question';
 import * as questionsRepository from '../repositories/questionsRepository';
 import ConflictError from '../errors/conflictError';
@@ -64,7 +64,7 @@ const insertAnswer = async ({
 
 const formatQuestion = ({
   isAnswered, question,
-}: {isAnswered: boolean, question: any}): FormatedQuestion|FormatedAnsweredQuestion => {
+}: {isAnswered: boolean, question: any}): FormattedQuestion|FormattedAnsweredQuestion => {
   const newSubmitAt = formatTimestamp({ info: question.submitAt });
   question.submitAt = newSubmitAt;
   delete question.id;
@@ -86,16 +86,18 @@ const selectQuestionById = async ({ questionId }: {questionId: number}) => {
   }
 
   if (!question.answered) {
-    const formatedQuestion = formatQuestion({ isAnswered: false, question });
-    return formatedQuestion;
+    const formattedQuestion = formatQuestion({ isAnswered: false, question });
+    return formattedQuestion;
   }
 
   const answeredQuestion = await questionsRepository.selectAnsweredQuestionById(
     questionId,
   );
 
-  const formatedAnsweredQuestion = formatQuestion({ isAnswered: true, question: answeredQuestion });
-  return formatedAnsweredQuestion;
+  const formattedAnsweredQuestion = formatQuestion({
+    isAnswered: true, question: answeredQuestion,
+  });
+  return formattedAnsweredQuestion;
 };
 
 export {
