@@ -7,6 +7,11 @@ import ConflictError from '../errors/conflictError';
 import NotFoundError from '../errors/notFoundError';
 import { Answer } from '../interfaces/answer';
 
+const formatTimestamp = (info: any) => {
+  const newTimestamp = new Date(info).toLocaleString();
+  return newTimestamp;
+};
+
 const insertQuestion = async ({
   question, student, group, tags,
 }: QuestionInfo): Promise<number> => {
@@ -28,8 +33,8 @@ const insertQuestion = async ({
 const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
   const notAnsweredQuestions = await questionsRepository.selectQuestions();
   notAnsweredQuestions.forEach((question) => {
-    const newTimestamp = new Date(question.submitAt).toLocaleString();
-    question.submitAt = newTimestamp;
+    const newTimeStamp = formatTimestamp(question.submitAt);
+    question.submitAt = newTimeStamp;
     delete question.tags;
     delete question.answered;
   });
@@ -66,8 +71,8 @@ const selectQuestionById = async (questionId: number) => {
   }
 
   if (!question.answered) {
-    const newTimestamp = new Date(question.submitAt).toLocaleString();
-    question.submitAt = newTimestamp;
+    const newTimeStamp = formatTimestamp(question.submitAt);
+    question.submitAt = newTimeStamp;
     delete question.id;
     return question;
   }
@@ -78,7 +83,7 @@ const selectQuestionById = async (questionId: number) => {
 
   delete answeredQuestion.question_id;
   delete answeredQuestion.id;
-  const newTimestamp = new Date(answeredQuestion.submitAt).toLocaleString();
+  const newTimestamp = formatTimestamp(answeredQuestion.submitAt);
   answeredQuestion.submitAt = newTimestamp;
 
   return answeredQuestion;
@@ -89,4 +94,5 @@ export {
   selectQuestions,
   insertAnswer,
   selectQuestionById,
+  formatTimestamp,
 };
