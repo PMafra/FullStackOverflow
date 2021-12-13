@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
 import { QueryResult } from 'pg';
 import connection from '../database/database';
-import { QuestionInfo, QuestionInfoDB, AnsweredQuestion } from '../interfaces/questionInfo';
+import { QuestionInfo, AnsweredQuestion } from '../interfaces/questionInfo';
 import { Answer } from '../interfaces/answer';
+import { filterHelper, SelectQueryInterface, generateSelect } from '../helpers/queryHelper';
 
 const insertQuestion = async ({
   question, student, group, tags,
@@ -13,28 +15,23 @@ const insertQuestion = async ({
   return result.rows[0];
 };
 
-const selectQuestion = async ({
-  question, student, group,
-}: QuestionInfo): Promise<QuestionInfoDB> => {
-  const result = await connection.query(
-    'SELECT * FROM "questions" WHERE question = $1 AND student = $2 AND "group" = $3;',
-    [question, student, group],
-  );
-  return result.rows[0];
-};
+const selectQuery = async ({
+  getAllNotAnswered, id, question, student, group,
+}: SelectQueryInterface) => {
+  const baseQuery = generateSelect({ table: 'questions' });
+  const {
+    finalQuery,
+    preparedValues,
+  } = filterHelper({
+    baseQuery, getAllNotAnswered, id, question, student, group,
+  });
 
-const selectQuestions = async (): Promise<QuestionInfoDB[]> => {
-  const result = await connection.query(
-    'SELECT * FROM "questions" WHERE answered = FALSE;',
-  );
-  return result.rows;
-};
+  const result = await connection.query(`${finalQuery};`, preparedValues);
 
-const selectQuestionById = async (questionId: number): Promise<QuestionInfoDB> => {
-  const result = await connection.query(
-    'SELECT * FROM "questions" WHERE id = $1;',
-    [questionId],
-  );
+  if (getAllNotAnswered) {
+    return result.rows;
+  }
+
   return result.rows[0];
 };
 
@@ -66,10 +63,8 @@ const selectAnsweredQuestionById = async (questionId: number): Promise<AnsweredQ
 
 export {
   insertQuestion,
-  selectQuestion,
-  selectQuestions,
-  selectQuestionById,
   insertNewAnswer,
   updateAnsweredState,
   selectAnsweredQuestionById,
+  selectQuery,
 };

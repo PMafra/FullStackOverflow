@@ -5,7 +5,7 @@ import ConflictError from '../errors/conflictError';
 import UnauthorizedError from '../errors/unauthorizedError';
 
 const insertUser = async ({ name, group }: User): Promise<string> => {
-  const isAlreadyRegistered = await userRepository.selectUser({
+  const isAlreadyRegistered = await userRepository.selectQuery({
     name, group,
   });
 
@@ -23,7 +23,7 @@ const insertUser = async ({ name, group }: User): Promise<string> => {
 };
 
 const selectUserByToken = async (token: string): Promise<UserDB> => {
-  const user = await userRepository.selectUserByToken(token);
+  const user = await userRepository.selectQuery({ token });
 
   if (!user) {
     throw new UnauthorizedError();

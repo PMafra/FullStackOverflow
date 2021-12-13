@@ -1,5 +1,6 @@
 import connection from '../database/database';
 import { User, UserDB } from '../interfaces/user';
+import { SelectQueryInterface, filterHelper, generateSelect } from '../helpers/queryHelper';
 
 const insertUser = async ({
   name, group, token,
@@ -11,26 +12,23 @@ const insertUser = async ({
   return result.rows[0];
 };
 
-const selectUser = async ({
-  name, group,
-}: User): Promise<UserDB> => {
-  const result = await connection.query(
-    'SELECT * FROM "users" WHERE name = $1 AND "group" = $2;',
-    [name, group],
-  );
-  return result.rows[0];
-};
+const selectQuery = async ({
+  token, name, group,
+}: SelectQueryInterface) => {
+  const baseQuery = generateSelect({ table: 'users' });
+  const {
+    finalQuery,
+    preparedValues,
+  } = filterHelper({
+    baseQuery, token, name, group,
+  });
 
-const selectUserByToken = async (token: string): Promise<UserDB> => {
-  const result = await connection.query(
-    'SELECT * FROM "users" WHERE token = $1;',
-    [token],
-  );
+  const result = await connection.query(`${finalQuery};`, preparedValues);
+
   return result.rows[0];
 };
 
 export {
-  selectUser,
   insertUser,
-  selectUserByToken,
+  selectQuery,
 };
